@@ -38,6 +38,8 @@ class PrismaAdapter extends BaseKeystoneAdapter {
     // TODO: Should we default to 'public' or null?
     if (this.provider === 'postgresql') {
       return this.dbSchemaName ? `${this.url}?schema=${this.dbSchemaName}` : this.url;
+    } else if (this.provider === 'sqlite') {
+      return this.url;
     }
   }
 
@@ -215,6 +217,9 @@ class PrismaAdapter extends BaseKeystoneAdapter {
   }
 
   async postConnect({ rels }) {
+    // console.log('TRY TO MAKE EXCLUSIVE');
+    // await this.prisma.$queryRaw('pragma locking_mode = EXCLUSIVE;');
+    // console.log('WIN?');
     Object.values(this.listAdapters).forEach(listAdapter => {
       listAdapter._postConnect({ rels, prisma: this.prisma });
     });
@@ -250,6 +255,13 @@ class PrismaAdapter extends BaseKeystoneAdapter {
         // If we're in prototype mode then we need to rebuild the tables after a reset
         this._runPrismaCmd(`migrate reset --force --preview-feature`);
         this._runPrismaCmd(`db push --force --preview-feature`);
+      }
+    } else if (this.provider === 'sqlite') {
+      const tables = await this.prisma.$queryRaw(
+        "SELECT name FROM sqlite_master WHERE type='table';"
+      );
+      for (const { name } of tables) {
+        await this.prisma.$queryRaw(`DELETE FROM "${name}";`);
       }
     } else {
       this._runPrismaCmd(`migrate reset --force --preview-feature`);
@@ -416,11 +428,12 @@ class PrismaListAdapter extends BaseListAdapter {
     if (search !== undefined && search !== '' && searchField) {
       if (searchField.fieldName === 'Text') {
         // FIXME: Think about regex
+        const mode = this.parentAdapter.provider === 'sqlite' ? undefined : 'insensitive';
         if (!ret.where) {
-          ret.where = { [searchFieldName]: { contains: search, mode: 'insensitive' } };
+          ret.where = { [searchFieldName]: { contains: search, mode } };
         } else {
           ret.where = {
-            AND: [ret.where, { [searchFieldName]: { contains: search, mode: 'insensitive' } }],
+            AND: [ret.where, { [searchFieldName]: { contains: search, mode } }],
           };
         }
         // const f = escapeRegExp;

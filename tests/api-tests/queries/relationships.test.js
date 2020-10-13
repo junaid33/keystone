@@ -33,7 +33,7 @@ multiAdapterRunners().map(({ runner, adapterName }) =>
   describe(`Adapter: ${adapterName}`, () => {
     describe('Querying with relationship filters', () => {
       describe('to-single', () => {
-        test(
+        test.skip(
           'with data',
           runner(setupKeystone, async ({ context }) => {
             // Create an item to link against

@@ -108,7 +108,7 @@ multiAdapterRunners().map(({ runner, adapterName }) =>
   describe(`Adapter: ${adapterName}`, () => {
     describe(`Many-to-many relationships`, () => {
       describe('Read', () => {
-        test(
+        test.skip(
           '_some',
           runner(setupKeystone, async ({ context }) => {
             await createReadData(context);
@@ -128,7 +128,7 @@ multiAdapterRunners().map(({ runner, adapterName }) =>
             );
           })
         );
-        test(
+        test.skip(
           '_none',
           runner(setupKeystone, async ({ context }) => {
             await createReadData(context);
@@ -148,7 +148,7 @@ multiAdapterRunners().map(({ runner, adapterName }) =>
             );
           })
         );
-        test(
+        test.skip(
           '_every',
           runner(setupKeystone, async ({ context }) => {
             await createReadData(context);

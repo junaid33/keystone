@@ -115,7 +115,7 @@ multiAdapterRunners().map(({ runner, adapterName }) =>
   describe(`Adapter: ${adapterName}`, () => {
     describe(`One-to-many relationships`, () => {
       describe('Read', () => {
-        test(
+        test.skip(
           'one',
           runner(setupKeystone, async ({ context }) => {
             await createComplexData(context);
@@ -136,7 +136,7 @@ multiAdapterRunners().map(({ runner, adapterName }) =>
             );
           })
         );
-        test(
+        test.skip(
           'is_null: true',
           runner(setupKeystone, async ({ context }) => {
             await createComplexData(context);
@@ -147,7 +147,7 @@ multiAdapterRunners().map(({ runner, adapterName }) =>
             expect(data.allUsers.length).toEqual(5);
           })
         );
-        test(
+        test.skip(
           'is_null: false',
           runner(setupKeystone, async ({ context }) => {
             await createComplexData(context);
@@ -362,7 +362,7 @@ multiAdapterRunners().map(({ runner, adapterName }) =>
         );
 
         ['A', 'B', 'C', 'D', 'E'].forEach(name => {
-          test(
+          test.skip(
             `delete company ${name}`,
             runner(setupKeystone, async ({ context }) => {
               // Setup a complex set of data
@@ -422,7 +422,7 @@ multiAdapterRunners().map(({ runner, adapterName }) =>
         });
 
         ['A1', 'B1', 'C1', 'D1'].forEach(name => {
-          test(
+          test.skip(
             `delete location ${name}`,
             runner(setupKeystone, async ({ context }) => {
               // Setup a complex set of data
