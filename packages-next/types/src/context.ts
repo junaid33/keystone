@@ -10,9 +10,10 @@ export type KeystoneContext = {
   sudo: () => KeystoneContext;
   exitSudo: () => KeystoneContext;
   withSession: (session: any) => KeystoneContext;
+  internal: () => KeystoneContext;
   totalResults: number;
   maxTotalResults: number;
-  schemaName: 'public';
+  schemaName: 'public' | 'internal';
   /** @deprecated */
   gqlNames: (listKey: string) => Record<string, string>; // TODO: actual keys
   /** @deprecated */
